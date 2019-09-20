@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>MakeMeFood</title>
+   <!-- Import Leaflet CSS Style Sheet -->
+   <link rel="stylesheet" href="https://npmcdn.com/leaflet@1.0.0-rc.2/dist/leaflet.css" />
+   <!-- Import Leaflet JS Library -->
+   <script src="https://npmcdn.com/leaflet@1.0.0-rc.2/dist/leaflet.js"></script>
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    </head>
+<body>
+    <div id="gps"></div>
+    <form class="form-inline">
+        <div class="form-group mx-sm-3 mb-2">
+            <label for="inputPassword2" class="sr-only">Password</label>
+            <input type="text" class="form-control" id="userInput" autocomplete="off" placeholder="Choose a city...">
+        </div>
+        <button type="submit" class="btn btn-primary mb-2" id="send">SEND</button>
+    </form>
+    
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6">
+            <div class="listederoulante">
+                <ul id="list"></ul>
+            </div> 
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6">
+            <div id="my_osm_widget_map"></div>
+        </div>
+      </div>
+    <script src="app.js"></script>
+</body>
+</html>

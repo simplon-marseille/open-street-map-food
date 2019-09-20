@@ -1,0 +1,18 @@
+#my_osm_widget_map { /* use the same name as <div id=""> */
+	width: 100%; /* important! if you need full width display */
+	height: 100vh;
+	margin: 0;
+	border-radius: 5px;
+	/* ... */
+}
+
+li{
+    list-style: none;
+}
+
+.listederoulante{
+	height: 100vh;
+	overflow: auto;
+	/* overflow-y: hidden;
+	overflow-y: scroll; */
+}
