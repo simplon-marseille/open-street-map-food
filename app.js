@@ -48,6 +48,8 @@ const getCityAndRestaurant = (city) => {
     fetch(URL)
     .then(response => response.json())
     .then((data) => {
+      document.querySelector('.nb-resultat').innerHTML = '';
+      document.querySelector('.nb-resultat').insertAdjacentHTML('beforeend', `<strong>${data.total_entries} restaurants</strong>`)
         listOfRestaurant.innerHTML = '';
         console.log(data.restaurants);
         data.restaurants.forEach(element => {
@@ -64,6 +66,7 @@ const getCityAndRestaurant = (city) => {
                           <div class="card-body">
                             <h5 class="card-title">${element.name}</h5>
                             <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                           <i class="far fa-heart"></i>
                           </div>
                         </div>
                       </div>
@@ -78,6 +81,8 @@ const getCityAndRestaurant = (city) => {
     })
 };
 
+
+
 const callToAction = document.querySelector('#send');
 const listOfRestaurant = document.querySelector('#list');
 const gps = document.querySelector('#gps');
@@ -85,8 +90,14 @@ const gps = document.querySelector('#gps');
 callToAction.addEventListener(('click'), (event) => {
     event.preventDefault();
     const userInput = document.querySelector('#userInput');
+    if(userInput.value.length != 0){
+      getCityAndRestaurant(userInput.value);
+    }else{
+      userInput.classList.add('is-invalid');
+      userInput.value = 'Veuillez entrer une ville';
+    }
     //--------------Appel de la fonction qui envoie des requêtes API et qui affichent les resultats----------
-    getCityAndRestaurant(userInput.value);
+
 });
 
 getCityAndRestaurant('chicago');

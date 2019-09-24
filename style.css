@@ -1,18 +1,57 @@
 #my_osm_widget_map { /* use the same name as <div id=""> */
 	width: 100%; /* important! if you need full width display */
-	height: 100vh;
+	height: 100%;
 	margin: 0;
 	border-radius: 5px;
+  overflow: hidden;
 	/* ... */
 }
 
 li{
     list-style: none;
+    padding-right: 10px;
+}
+
+nav{
+  height: 80px;
+  border-bottom: 1px solid rgba(0,0,0,.1);
+}
+
+header{
+  overflow: hidden;
+  height: 100vh;
+}
+
+.nav2{
+  position: absolute;
+  right: 40px;
+  color: gray;
+  font-weight: bold;
+}
+
+#send{
+  display: none;
 }
 
 .listederoulante{
+  margin-top: 50px;
 	height: 100vh;
 	overflow: auto;
-	/* overflow-y: hidden;
-	overflow-y: scroll; */
+}
+
+.center-left{
+  display: flex;
+  align-items: center;
+  justify-content: left;
+}
+
+.center{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#userInput{
+  width: 400px;
+  height: 50px;
 }

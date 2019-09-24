@@ -10,28 +10,39 @@
    <!-- Import Leaflet JS Library -->
    <script src="https://npmcdn.com/leaflet@1.0.0-rc.2/dist/leaflet.js"></script>
    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
     </head>
 <body>
-    <div id="gps"></div>
-    <form class="form-inline">
-        <div class="form-group mx-sm-3 mb-2">
+  <header>
+    <nav class="center-left">
+      <form class="form-inline">
+        <div class="form-group  mx-sm-3 mb-2">
             <label for="inputPassword2" class="sr-only">Password</label>
-            <input type="text" class="form-control" id="userInput" autocomplete="off" placeholder="Choose a city...">
+            <input type="text" class="form-control shadow" required id="userInput" autocomplete="off" placeholder="Choose a city...and press enter">
         </div>
         <button type="submit" class="btn btn-primary mb-2" id="send">SEND</button>
     </form>
-    
+    <ul class="nav2 center">
+      <li>HOME</li>
+      <li>PRODUCT</li>
+      <li>PRICE</li>
+      <li>CONTACT</li>
+    </ul>
+    </nav>
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-6">
             <div class="listederoulante">
+              <div class="nb-resultat center"></div>
                 <ul id="list"></ul>
-            </div> 
+            </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6" id="map">
             <div id="my_osm_widget_map"></div>
         </div>
       </div>
+  </header>
+
     <script src="app.js"></script>
 </body>
 </html>
