@@ -112,13 +112,11 @@ callToAction.addEventListener(('click'), (event) => {
       getCityAndRestaurant(userInput.value);
     }else{
       userInput.classList.add('is-invalid');
-      userInput.value = 'Veuillez entrer une ville';
+      userInput.setAttribute("placeholder", "Veuillez entrer une ville") ;
     }
     //--------------Appel de la fonction qui envoie des requêtes API et qui affichent les resultats----------
 
 });
 
-
-
-
 getCityAndRestaurant('chicago');
+
