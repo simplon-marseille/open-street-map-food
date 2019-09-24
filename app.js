@@ -10,69 +10,65 @@
 
 
 
-
-//-------------Affichage de la map Openstreetmap
-var mymap = L.map('my_osm_widget_map', { /* use the same name as your <div id=""> */
-  center: [51.505, -0.09], /* set GPS Coordinates */
-  zoom: 17, /* define the zoom level */
-  zoomControl: false, /* false = no zoom control buttons displayed */
-  scrollWheelZoom: false /* false = scrolling zoom on the map is locked */
-});
-
-L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiYWNhcmRuaWNvbGFzOTEiLCJhIjoiY2swcnl3Ymt4MDFpMTNkcDVrdzRvMmQ5MyJ9.Jmw2gfO6CTF4yjmOkGm49w', { /* set your personal MapBox Access Token */
-  maxZoom: 20, /* zoom limit of the map */
-  attribution: 'Données &copy; Contributeurs <a href="http://openstreetmap.org">OpenStreetMap</a> + ' +
-    '<a href="http://mapbox.com">Mapbox</a> | ' +
-    '<a href="https://creativecommons.org/licenses/by/2.0/">CC-BY</a> ' +
-    'Guillaume Rouan 2016', /* set the map's caption */
-    id: 'mapbox.streets' /* mapbox.light / dark / streets / outdoors / satellite */
-}).addTo(mymap);
-
-L.marker([51.505, -0.09]).addTo(mymap); /* set your location's GPS Coordinates : [LAT,LON] */
-
 // --------------------------API OpenTable------------------------
 
-const callToAction = document.querySelector('#send');
-const listOfRestaurant = document.querySelector('#list');
-//https://opentable.herokuapp.com/api/restaurants?city=chicago
-const gps = document.querySelector('#gps');
-callToAction.addEventListener(('click'), (event) => {
-    event.preventDefault();
-    const userInput = document.querySelector('#userInput');
-    const URLCity = `https://nominatim.openstreetmap.org/search?q=${userInput.value}&format=json`;
+const getCityAndRestaurant = (city) => {
+  //Requête vers l'API Openstreetmap
+  const URLCity = `https://nominatim.openstreetmap.org/search?q=${city}&format=json`;
     fetch(URLCity)
     .then(responseFromServer => responseFromServer.json())
     .then((dataJson) => {
-        console.log(dataJson[0].lat);
-        console.log(dataJson[0].lon);
-        gps.insertAdjacentHTML('beforeend', `<div id="mapcoords" data-lat="${dataJson[0].lat}" data-lng="${dataJson[0].lon}"></div>`)
-        
-    });
+        //-------------Affichage de la map Openstreetmap----------------
+        document.querySelector('#map').innerHTML = '<div id="my_osm_widget_map"></div>';
+        var mymap = L.map('my_osm_widget_map', { /* use the same name as your <div id=""> */
+        center: [dataJson[0].lat, dataJson[0].lon], /* set GPS Coordinates */
+        zoom: 13, /* define the zoom level */
+        zoomControl: false, /* false = no zoom control buttons displayed */
+        scrollWheelZoom: false /* false = scrolling zoom on the map is locked */
+        });
 
-    const URL = `https://opentable.herokuapp.com/api/restaurants?city=${userInput.value}`;
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiYWNhcmRuaWNvbGFzOTEiLCJhIjoiY2swcnl3Ymt4MDFpMTNkcDVrdzRvMmQ5MyJ9.Jmw2gfO6CTF4yjmOkGm49w', { /* set your personal MapBox Access Token */
+        maxZoom: 20, /* zoom limit of the map */
+        attribution: 'Données &copy; Contributeurs <a href="http://openstreetmap.org">OpenStreetMap</a> + ' +
+        '<a href="http://mapbox.com">Mapbox</a> | ' +
+        '<a href="https://creativecommons.org/licenses/by/2.0/">CC-BY</a> ' +
+        'Guillaume Rouan 2016', /* set the map's caption */
+        id: 'mapbox.streets' /* mapbox.light / dark / streets / outdoors / satellite */
+        }).addTo(mymap);
+
+        L.marker([dataJson[0].lat, dataJson[0].lon]).addTo(mymap); /* set your location's GPS Coordinates : [LAT,LON] */
+    });
+    //----------------------------------------------------------------
+
+
+
+
+    //Requête vers l'API Opentable
+    const URL = `https://opentable.herokuapp.com/api/restaurants?city=${city}`;
     fetch(URL)
     .then(response => response.json())
     .then((data) => {
+        listOfRestaurant.innerHTML = '';
         console.log(data.restaurants);
         data.restaurants.forEach(element => {
             console.log(element.name);
             listOfRestaurant.insertAdjacentHTML('beforeend', `
                 <li>
-                <a href="${element.reserve_url}" style="text-decoration: none;">
-                <div class="card shadow mb-3" style="max-width: 540px;">
-                <div class="row no-gutters">
-                    <div class="col-md-4">
-                    <img src="${element.image_url}" class="card-img" alt="...">
+                  <a href="${element.reserve_url}" style="text-decoration: none;">
+                    <div class="card shadow mb-3">
+                      <div class="row no-gutters">
+                        <div class="col-md-4">
+                          <img src="${element.image_url}" class="card-img" alt="...">
+                          </div>
+                          <div class="col-md-8">
+                          <div class="card-body">
+                            <h5 class="card-title">${element.name}</h5>
+                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title">${element.name}</h5>
-                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                    </div>
-                    </div>
-                </div>
-                </div>
-                </a>
+                  </a>
                 </li>
             `)
         });
@@ -80,5 +76,17 @@ callToAction.addEventListener(('click'), (event) => {
     .catch((error) => {
         console.log(error.message);
     })
+};
 
+const callToAction = document.querySelector('#send');
+const listOfRestaurant = document.querySelector('#list');
+const gps = document.querySelector('#gps');
+
+callToAction.addEventListener(('click'), (event) => {
+    event.preventDefault();
+    const userInput = document.querySelector('#userInput');
+    //--------------Appel de la fonction qui envoie des requêtes API et qui affichent les resultats----------
+    getCityAndRestaurant(userInput.value);
 });
+
+getCityAndRestaurant('chicago');
