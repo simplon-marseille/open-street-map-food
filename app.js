@@ -13,7 +13,53 @@
 // --------------------------API OpenTable------------------------
 
 const getCityAndRestaurant = (city) => {
-  //Requête vers l'API Openstreetmap
+
+
+
+
+    //Requête vers l'API Opentable
+    const URL = `https://opentable.herokuapp.com/api/restaurants?city=${city}`;
+    fetch(URL)
+    .then(response => response.json())
+    .then((data) => {
+      document.querySelector('.nb-resultat').innerHTML = '';
+      document.querySelector('.nb-resultat').insertAdjacentHTML('beforeend', `<strong>${data.total_entries} restaurants</strong>`)
+        listOfRestaurant.innerHTML = '';
+        //console.log(data.restaurants);
+        data.restaurants.forEach(element => {
+            //console.log(element.name);
+            listOfRestaurant.insertAdjacentHTML('beforeend', `
+                <li>
+                  <a href="${element.reserve_url}" style="text-decoration: none;">
+                    <div class="card shadow mb-3" data-lat="${element.lat}" data-lng="${element.lng}" data-name="${element.name}">
+                      <div class="row no-gutters">
+                        <div class="col-md-4">
+                          <img src="${element.image_url}" class="card-img" alt="...">
+                          </div>
+                          <div class="col-md-8">
+                          <div class="card-body">
+                            <h5 class="card-title">${element.name}</h5>
+                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                           <i class="far fa-heart"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+            `)
+        });
+        // const cards = document.querySelectorAll('.card');
+        // console.log(cards);
+    })
+    .catch((error) => {
+        console.log(error.message);
+    })
+
+
+
+
+     //Requête vers l'API Openstreetmap
   const URLCity = `https://nominatim.openstreetmap.org/search?q=${city}&format=json`;
     fetch(URLCity)
     .then(responseFromServer => responseFromServer.json())
@@ -36,49 +82,21 @@ const getCityAndRestaurant = (city) => {
         id: 'mapbox.streets' /* mapbox.light / dark / streets / outdoors / satellite */
         }).addTo(mymap);
 
-        L.marker([dataJson[0].lat, dataJson[0].lon]).addTo(mymap); /* set your location's GPS Coordinates : [LAT,LON] */
+        L.marker([dataJson[0].lat, dataJson[0].lon]).addTo(mymap);
+         /* set your location's GPS Coordinates : [LAT,LON] */
+         //affichage des restaurants sous forme de marker
+        const cards = document.querySelectorAll('.card');
+        console.log(cards);
+        cards.forEach((card) => {
+          //implémentation des markers
+         const marker =  L.marker([card.getAttribute('data-lat'), card.getAttribute('data-lng')]).addTo(mymap);
+         //affichage d'une bulle d'info
+         const popup = marker.bindPopup(card.getAttribute('data-name'));
+        });
+
     });
     //----------------------------------------------------------------
 
-
-
-
-    //Requête vers l'API Opentable
-    const URL = `https://opentable.herokuapp.com/api/restaurants?city=${city}`;
-    fetch(URL)
-    .then(response => response.json())
-    .then((data) => {
-      document.querySelector('.nb-resultat').innerHTML = '';
-      document.querySelector('.nb-resultat').insertAdjacentHTML('beforeend', `<strong>${data.total_entries} restaurants</strong>`)
-        listOfRestaurant.innerHTML = '';
-        console.log(data.restaurants);
-        data.restaurants.forEach(element => {
-            console.log(element.name);
-            listOfRestaurant.insertAdjacentHTML('beforeend', `
-                <li>
-                  <a href="${element.reserve_url}" style="text-decoration: none;">
-                    <div class="card shadow mb-3">
-                      <div class="row no-gutters">
-                        <div class="col-md-4">
-                          <img src="${element.image_url}" class="card-img" alt="...">
-                          </div>
-                          <div class="col-md-8">
-                          <div class="card-body">
-                            <h5 class="card-title">${element.name}</h5>
-                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                           <i class="far fa-heart"></i>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-            `)
-        });
-    })
-    .catch((error) => {
-        console.log(error.message);
-    })
 };
 
 
@@ -99,5 +117,8 @@ callToAction.addEventListener(('click'), (event) => {
     //--------------Appel de la fonction qui envoie des requêtes API et qui affichent les resultats----------
 
 });
+
+
+
 
 getCityAndRestaurant('chicago');
